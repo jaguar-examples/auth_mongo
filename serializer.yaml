@@ -1,0 +1,3 @@
+serializers:
+  - lib/common/serializer/serializer.dart
+  - lib/server/mongo/serializer/serializer.dart

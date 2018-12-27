@@ -17,7 +17,8 @@ import '../mongo/db/db.dart';
 part 'auth.dart';
 part 'todo.dart';
 
-const String mongoUri = "mongodb://localhost:27018/todos";
+// Mongo pool
+final mongoPool = MongoPool('mongodb://localhost:27018/test');
 
 @GenController(path: '/api')
 class TodoApi extends Controller {

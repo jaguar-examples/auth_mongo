@@ -1,26 +1,19 @@
 library serializer_mongo;
 
-import 'package:jaguar_serializer/serializer.dart';
+import 'package:mongo_dart/mongo_dart.dart';
+import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:jaguar_serializer_mongo/jaguar_serializer_mongo.dart';
-import 'package:auth_mongo_example/common/models/models.dart';
+import '../../models/models.dart';
+import 'package:common/serializer/serializer.dart' show TodoSerializer;
 
-part 'serializer.g.dart';
+export 'package:common/serializer/serializer.dart' show TodoSerializer;
 
-@GenSerializer()
-@MongoId(#id)
-@EnDecodeField(#id, asAndFrom: "_id")
-class TodoCodec extends Serializer<Todo> with _$TodoCodec {
-  Todo createModel() => new Todo();
+part 'serializer.jser.dart';
 
-  static final TodoCodec codec = new TodoCodec();
-}
-
-@GenSerializer()
-@ProvideSerializer(Todo, TodoCodec)
-@MongoId(#id)
-@EnDecodeField(#id, asAndFrom: "_id")
-class UserCodec extends Serializer<User> with _$UserCodec {
-  User createModel() => new User();
-
-  static final UserCodec codec = new UserCodec();
+@GenSerializer(
+    fields: {'id': EnDecode(alias: '_id', processor: MongoId())},
+    serializers: [TodoSerializer])
+class ServerUserSerializer extends Serializer<ServerUser>
+    with _$ServerUserSerializer {
+  static final serializer = ServerUserSerializer();
 }

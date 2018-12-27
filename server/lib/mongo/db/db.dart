@@ -2,51 +2,45 @@ library db;
 
 import 'dart:async';
 import 'package:mongo_dart/mongo_dart.dart';
-import 'package:jaguar_serializer_mongo/jaguar_serializer_mongo.dart';
-import 'package:auth_mongo_example/common/models/models.dart';
-import 'package:auth_mongo_example/server/mongo/serializer/serializer.dart';
+import '../../models/models.dart';
+import '../serializer/serializer.dart';
 
-class MgoUser extends MgoAccess<User> {
-  final UserCodec codec = UserCodec.codec;
-
+class UserAccess {
   DbCollection _col;
 
-  MgoUser(Db db) {
+  UserAccess(Db db) {
     _col = db.collection("users");
   }
 
-  Future<User> getById(String id) async {
-    Map map = await _col.findOne(where.id(ObjectId.parse(id)));
-    return decode(map);
-  }
+  Future<ServerUser> getById(String id) => _col
+      .findOne(where.id(ObjectId.parse(id)))
+      .then(ServerUserSerializer.serializer.fromMap);
 
-  Future<String> create(User user) async {
-    String id = new ObjectId().toHexString();
-    user.id = id;
-    await _col.insert(encode(user));
-    return id;
-  }
-
-  Future<String> addTodo(String id, Todo todo) async {
-    String id = new ObjectId().toHexString();
+  Future<String> addTodo(String userId, Todo todo) async {
+    String id = ObjectId().toHexString();
     todo.id = id;
 
-    final upd = modify.push("todos", TodoCodec.codec.toMap(todo));
-    await _col.update(where.id(ObjectId.parse(id)), upd);
+    final upd = modify.push("todos", TodoSerializer().toMap(todo));
+    await _col.update(where.id(ObjectId.parse(userId)), upd);
     return id;
   }
 
-  Future<String> deleteTodo(String id, String todoId) async {
+  Future<void> deleteTodo(String userId, String todoId) async {
     final upd = modify.pull("todos", where.id(ObjectId.parse(todoId)));
-    await _col.update(where.id(ObjectId.parse(id)), upd);
-    return id;
+    await _col.update(where.id(ObjectId.parse(userId)), upd);
   }
 
-  Future<String> updateTodo(String id, Todo todo) async {
-    final q = where.id(ObjectId.parse(id));
+  Future<void> updateTodo(String userId, Todo todo) async {
+    final q = where.id(ObjectId.parse(userId));
     q.eq(r"todos._$", ObjectId.parse(todo.id));
-    final upd = modify.set(r"todos.$", TodoCodec.codec.toMap(todo));
+    final upd = modify.set(r"todos.$", TodoSerializer().toMap(todo));
     await _col.update(q, upd);
+  }
+
+  Future<String> create(ServerUser user) async {
+    String id = ObjectId().toHexString();
+    user.id = id;
+    await _col.insert(ServerUserSerializer.serializer.toMap(user));
     return id;
   }
 }

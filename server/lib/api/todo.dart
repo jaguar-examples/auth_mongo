@@ -4,8 +4,12 @@ part of 'api.dart';
 class TodoRoutes extends Controller {
   //Get to-dos
   @Get()
-  List<Todo> get(Context ctx) {
-    // TODO
+  Future<List<Todo>> get(Context ctx) async {
+    final user = ctx.getVariable<ServerUser>();
+    final Db db = ctx.getVariable<Db>();
+    final mgo = UserAccess(db);
+    final userAgain = await mgo.getById(user.id);
+    return userAgain.todos;
   }
 
   //Add to-do
@@ -23,34 +27,24 @@ class TodoRoutes extends Controller {
     return userAgain.todos;
   }
 
-  //Update to-do
-  @Put()
-  Future<List<Todo>> update(Context ctx) async {
-    /* TODO
-    final MgoUser mgo = new MgoUser(db);
-    await mgo.updateTodo(user.id, todo);
-
-    final userAgain = await mgo.getById(user.id);
-    return userAgain.todos;
-    */
-  }
-
   //Delete to-do
-  @Delete()
+  @Delete(path: "/:todoId")
   Future<List<Todo>> delete(Context ctx) async {
-    /* TODO
-    final MgoUser mgo = new MgoUser(db);
-    await mgo.deleteTodo(user.id, todoId);
+    final user = ctx.getVariable<ServerUser>();
+    final Db db = ctx.getVariable<Db>();
+
+    String todoId = ctx.pathParams['todoId'];
+
+    final mgo = UserAccess(db);
+    mgo.deleteTodo(user.id, todoId);
 
     final userAgain = await mgo.getById(user.id);
     return userAgain.todos;
-    */
   }
 
   @override
-  Future<Function> before(Context ctx) async {
+  Future<void> before(Context ctx) async {
     await mongoPool(ctx);
     await Authorizer.authorize<ServerUser>(ctx);
-    // TODO
   }
 }

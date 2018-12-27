@@ -30,13 +30,6 @@ class UserAccess {
     await _col.update(where.id(ObjectId.parse(userId)), upd);
   }
 
-  Future<void> updateTodo(String userId, Todo todo) async {
-    final q = where.id(ObjectId.parse(userId));
-    q.eq(r"todos._$", ObjectId.parse(todo.id));
-    final upd = modify.set(r"todos.$", TodoSerializer().toMap(todo));
-    await _col.update(q, upd);
-  }
-
   Future<String> create(ServerUser user) async {
     String id = ObjectId().toHexString();
     user.id = id;

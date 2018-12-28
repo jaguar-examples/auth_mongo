@@ -14,13 +14,13 @@ part 'auth.dart';
 part 'todo.dart';
 
 // Mongo pool
-final mongoPool = MongoPool('mongodb://localhost:27018/test');
+final mongoPool = MongoPool('mongodb://localhost:27018/todo_example_28dec18');
 
 @GenController(path: '/api')
 class TodoApi extends Controller {
   @IncludeController(path: '/user')
-  final UserRoutes userRoutes = new UserRoutes();
+  final userRoutes = UserRoutes();
 
   @IncludeController(path: '/todo')
-  final TodoRoutes todoRoutes = new TodoRoutes();
+  final todoRoutes = TodoRoutes();
 }

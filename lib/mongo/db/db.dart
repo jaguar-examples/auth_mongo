@@ -13,7 +13,7 @@ class UserAccess {
   }
 
   Future<ServerUser> getByName(String name) => _col
-      .findOne(where.eq("name", name))
+      .findOne(where.eq("username", name))
       .then(ServerUserSerializer.serializer.fromMap);
 
   Future<ServerUser> getById(String id) => _col

@@ -14,7 +14,7 @@ class ServerUser implements User, PasswordUser {
 
   List<Todo> todos;
 
-  ServerUser({this.id, this.username, this.email, this.todos});
+  ServerUser({this.id, this.username, this.email, this.password, this.todos});
 
   @override
   String get authorizationId => id;

@@ -18,8 +18,10 @@ abstract class _$ServerUserSerializer implements Serializer<ServerUser> {
     setMapValue(ret, '_id', _mongoId.serialize(model.id));
     setMapValue(ret, 'username', model.username);
     setMapValue(ret, 'email', model.email);
+    setMapValue(ret, 'password', model.password);
     setMapValue(ret, 'todos',
         codeIterable(model.todos, (val) => _todoSerializer.toMap(val as Todo)));
+    setMapValue(ret, 'authorizationId', model.authorizationId);
     return ret;
   }
 
@@ -30,6 +32,7 @@ abstract class _$ServerUserSerializer implements Serializer<ServerUser> {
     obj.id = _mongoId.deserialize(map['_id'] as ObjectId);
     obj.username = map['username'] as String;
     obj.email = map['email'] as String;
+    obj.password = map['password'] as String;
     obj.todos = codeIterable<Todo>(
         map['todos'] as Iterable, (val) => _todoSerializer.fromMap(val as Map));
     return obj;

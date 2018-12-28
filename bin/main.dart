@@ -10,10 +10,12 @@ final jwtConfig = JwtConfig(
 );
 
 main() async {
-  final jaguar =
-      Jaguar(sessionManager: JwtSession(jwtConfig, io: SessionIoCookie()));
-  jaguar.userFetchers[ServerUser] = MyAuthFetcher();
-  jaguar.add(reflect(TodoApi()));
+  final server = Jaguar(
+      port: 10000,
+      sessionManager: JwtSession(jwtConfig, io: SessionIoCookie()));
+  server.userFetchers[ServerUser] = MyAuthFetcher();
+  server.add(reflect(TodoApi()));
 
-  await jaguar.serve();
+  server.log.onRecord.listen(print);
+  await server.serve(logRequests: true);
 }

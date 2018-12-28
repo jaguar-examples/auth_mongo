@@ -3,7 +3,7 @@ part of 'api.dart';
 @GenController()
 class TodoRoutes extends Controller {
   //Get to-dos
-  @Get()
+  @GetJson()
   Future<List<Todo>> get(Context ctx) async {
     final user = ctx.getVariable<ServerUser>();
     final Db db = ctx.getVariable<Db>();
@@ -13,7 +13,7 @@ class TodoRoutes extends Controller {
   }
 
   //Add to-do
-  @Post()
+  @PostJson()
   Future<List<Todo>> add(Context ctx) async {
     final user = ctx.getVariable<ServerUser>();
     final Db db = ctx.getVariable<Db>();
@@ -28,7 +28,7 @@ class TodoRoutes extends Controller {
   }
 
   //Delete to-do
-  @Delete(path: "/:todoId")
+  @DeleteJson(path: "/:todoId")
   Future<List<Todo>> delete(Context ctx) async {
     final user = ctx.getVariable<ServerUser>();
     final Db db = ctx.getVariable<Db>();

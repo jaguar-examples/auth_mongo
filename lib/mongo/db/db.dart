@@ -30,7 +30,7 @@ class UserAccess {
   }
 
   Future<void> deleteTodo(String userId, String todoId) async {
-    final upd = modify.pull("todos", where.id(ObjectId.parse(todoId)));
+    final upd = modify.pull("todos", {"id": todoId});
     await _col.update(where.id(ObjectId.parse(userId)), upd);
   }
 

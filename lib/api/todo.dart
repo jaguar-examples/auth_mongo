@@ -18,7 +18,7 @@ class TodoRoutes extends Controller {
     final user = ctx.getVariable<ServerUser>();
     final Db db = ctx.getVariable<Db>();
 
-    final todo = await ctx.bodyAsJson(convert: TodoSerializer().fromMap);
+    final todo = await ctx.bodyAsText();
 
     final mgo = UserAccess(db);
     await mgo.addTodo(user.id, todo);

@@ -12,13 +12,17 @@ class UserAccess {
     _col = db.collection("users");
   }
 
+  Future<ServerUser> getByName(String name) => _col
+      .findOne(where.eq("name", name))
+      .then(ServerUserSerializer.serializer.fromMap);
+
   Future<ServerUser> getById(String id) => _col
       .findOne(where.id(ObjectId.parse(id)))
       .then(ServerUserSerializer.serializer.fromMap);
 
-  Future<String> addTodo(String userId, Todo todo) async {
+  Future<String> addTodo(String userId, String message) async {
     String id = ObjectId().toHexString();
-    todo.id = id;
+    final todo = Todo(id: id, message: message);
 
     final upd = modify.push("todos", TodoSerializer().toMap(todo));
     await _col.update(where.id(ObjectId.parse(userId)), upd);

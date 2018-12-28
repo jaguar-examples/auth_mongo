@@ -4,20 +4,20 @@ part of 'api.dart';
 class UserRoutes extends Controller {
   /// Signup
   @Post(path: '/signup')
-  Future<User> signup(Context ctx) async {
+  Future<void> signup(Context ctx) async {
     final Db db = ctx.getVariable<Db>();
     final body = await ctx.bodyAsMap();
     final user =
         ServerUser(email: body['email'], username: body['username'], todos: []);
-    final id = await UserAccess(db).create(user);
-    return UserAccess(db).getById(id);
+    await UserAccess(db).create(user);
+    ctx.response = Redirect(Uri.parse("/"));
   }
 
   // login
   @Post(path: '/login')
-  Future<String> login(Context ctx) async {
+  Future<void> login(Context ctx) async {
     await BasicAuth.authenticate<ServerUser>(ctx);
-    return "Success";
+    ctx.response = Redirect(Uri.parse("/dashboard.html"));
   }
 
   // Get user
@@ -27,7 +27,7 @@ class UserRoutes extends Controller {
   }
 
   @override
-  Future<Function> before(Context ctx) async {
+  Future<void> before(Context ctx) async {
     await mongoPool(ctx);
   }
 }

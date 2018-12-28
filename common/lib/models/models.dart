@@ -1,9 +1,9 @@
 class Todo {
   String id;
 
-  String content;
+  String message;
 
-  bool finished;
+  Todo({this.id, this.message});
 }
 
 class User {

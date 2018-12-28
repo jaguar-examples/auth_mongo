@@ -9,8 +9,11 @@ environment:
 
 dependencies:
   jaguar_serializer: ^2.2.6
+  jaguar_resty: ^2.9.1
+  jaguar_retrofit: ^2.6.5
 
 dev_dependencies:
   test: ^1.0.0
   jaguar_serializer_cli:
+  jaguar_retrofit_gen: ^2.6.4
   build_runner:

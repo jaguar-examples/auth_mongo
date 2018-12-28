@@ -16,7 +16,7 @@ dependencies:
   jaguar_auth:
   jaguar_reflect:
   jaguar_session_jwt: ^2.4.2
-  jaguar_dev_proxy:
+  jaguar_dev_proxy: ^2.4.4
   common:
     path: ../todo_client/common
 

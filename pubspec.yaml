@@ -8,14 +8,15 @@ environment:
   sdk: '>=2.1.0 <3.0.0'
 
 dependencies:
-  jaguar: ^2.4.16
+  jaguar: ^2.4.18
   jaguar_serializer: ^2.2.6
   jaguar_serializer_mongo: ^2.2.0
   jaguar_mongo:
   jaguar_common:
   jaguar_auth:
   jaguar_reflect:
-  jaguar_session_jwt:
+  jaguar_session_jwt: ^2.4.2
+  jaguar_dev_proxy:
   common:
     path: ../todo_client/common
 
